@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  serverlet.context-path: /tfg/api
+
+spring:
+  application:
+    name: RepEat
+    schema: rep_eat
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    url: ${SQLSERVER_CONNECTION_STRING}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        default_schema: ${spring.application.schema}
+  flyway:
+    url: ${spring.datasource.url}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    default-schema: ${spring.application.schema}
+    placeholders:
+      schema: ${spring.application.schema}

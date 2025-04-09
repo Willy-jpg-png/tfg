@@ -1,6 +1,8 @@
 package com.ggv.tfg.usecase;
 
 import com.ggv.tfg.port.in.UserDefinitionManagementPort;
+import com.ggv.tfg.port.out.UserDefinitionPersistencePort;
+import com.ggv.tfg.stereotype.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,19 +11,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserDefinitionUseCase implements UserDefinitionManagementPort {
 
+    private UserDefinitionPersistencePort userDefinitionPersistencePort;
+
     @Override
     public void signIn(String username, String password) {
-        log.info("SignIn user {}", username);
+
+        userDefinitionPersistencePort.signIn(username, password);
     }
 
     @Override
     public void signUp(String username, String password, String email) {
-        log.info("SignUp user {}", username);
+
+        userDefinitionPersistencePort.signUp(username, password, email);
     }
 
     @Override
     public void signOut() {
-        log.info("SignOut");
+
+        userDefinitionPersistencePort.signOut();
     }
 
 }
