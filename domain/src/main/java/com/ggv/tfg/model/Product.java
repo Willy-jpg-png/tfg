@@ -1,20 +1,22 @@
 package com.ggv.tfg.model;
 
-import com.ggv.tfg.model.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Product {
 
     private Long id;
-    private String username;
     private String name;
-    private String password;
-    private String email;
-    private RoleEnum role;
+    private Restaurant restaurant;
+    private String description;
+    private Double price;
+    private List<Long> addingIds;
+    private String image;
 
 }

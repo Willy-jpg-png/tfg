@@ -1,0 +1,155 @@
+components:
+  schemas:
+    SignUpCustomerRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+            type: string
+        address:
+          type: string
+
+    SignUpRestaurantRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        description:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+
+    SignUpDeliveryPersonRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        photo:
+          type: string
+
+    SignInRest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    UpdateCostumerRest:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+
+    UpdateRestaurantRest:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        description:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+
+    UpdateDeliveryPersonRest:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        photo:
+          type: string
+
+    UserRest:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        username:
+          type: string
+        role:
+          type: string
+          enum: [CUSTOMER, RESTAURANT, DELIVERY_PERSON]
+
+    RestaurantRestLite:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        description:
+          type: string
+        website:
+          type: string
+
+    PagedRestaurantRest:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestaurantRestLite'
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: integer

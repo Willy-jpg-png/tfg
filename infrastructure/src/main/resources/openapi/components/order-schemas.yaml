@@ -1,0 +1,49 @@
+components:
+  schemas:
+    PagedOrderRest:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderRest'
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: integer
+    OrderCreationRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        productIds:
+          type: array
+          items:
+            type: number
+    OrderRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        restaurantId:
+          type: number
+          format: int64
+        customerId:
+          type: number
+          format: int64
+        deliveryPersonId:
+          type: number
+          format: int64
+        productIds:
+          type: array
+          items:
+            type: number
+        totalPrice:
+          type: number
+          format: double
+        orderStatus:
+          type: string

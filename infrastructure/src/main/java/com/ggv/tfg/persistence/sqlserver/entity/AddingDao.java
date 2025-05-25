@@ -6,19 +6,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "[User]")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "Adding")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDao {
+public class AddingDao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
+
     private String name;
-    private String password;
-    private String email;
-    private String role;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurantId", referencedColumnName = "id")
+    private RestaurantDao restaurant;
+
+    private String description;
+
+    private Double price;
+
+    private String image;
+
 }

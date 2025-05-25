@@ -4,12 +4,53 @@ info:
   version: v1
 
 paths:
-  /v1/rep-eat/users:
+  /v1/rep-eat/users/signUpCustomer:
+    post:
+      tags:
+        - UsersController
+      operationId: signUpCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/user-schemas.yaml#/components/schemas/SignUpCustomerRest"
+      responses:
+        200:
+          description: User created
+        400:
+          description: User creation error
+
+  /v1/rep-eat/users/signUpRestaurant:
+    post:
+      tags:
+        - UsersController
+      operationId: signUpRestaurant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/user-schemas.yaml#/components/schemas/SignUpRestaurantRest"
+      responses:
+        200:
+          description: User created
+        400:
+          description: User creation error
+
+  /v1/rep-eat/users/{user}/restaurants:
     get:
       tags:
         - UsersController
-      operationId: getAUsers
+      operationId: retrieveRestaurants
       parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user logged in
         - in: query
           name: pageNumber
           schema:
@@ -24,6 +65,593 @@ paths:
           required: false
       responses:
         200:
-          description: OK
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/user-schemas.yaml#/components/schemas/PagedRestaurantRest"
         400:
-          description: ERROR
+          description: Restaurants retrieve error
+
+
+  /v1/rep-eat/users/signUpDeliveryPerson:
+    post:
+      tags:
+        - UsersController
+      operationId: signUpDeliveryPerson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/user-schemas.yaml#/components/schemas/SignUpDeliveryPersonRest"
+      responses:
+        200:
+          description: User created
+        400:
+          description: User creation error
+
+  /v1/rep-eat/users/signIn:
+    post:
+      tags:
+        - UsersController
+      operationId: signIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/user-schemas.yaml#/components/schemas/SignInRest"
+      responses:
+        200:
+          description: User successfully signed in
+          content:
+            application/json:
+              schema:
+                $ref: "./components/user-schemas.yaml#/components/schemas/UserRest"
+        400:
+          description: Error while signing in
+        404:
+          description: User not found
+
+
+  /v1/rep-eat/users/{userId}/customer:
+    patch:
+      tags:
+        - UsersController
+      operationId: updateCustomer
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/user-schemas.yaml#/components/schemas/UpdateCostumerRest"
+      responses:
+        200:
+          description: User updated
+        400:
+          description: User update error
+        404:
+          description: User not found
+
+  /v1/rep-eat/users/{userId}/restaurant:
+    patch:
+      tags:
+        - UsersController
+      operationId: updateRestaurant
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/user-schemas.yaml#/components/schemas/UpdateRestaurantRest"
+      responses:
+        200:
+          description: User updated
+        400:
+          description: User update error
+        404:
+          description: User not found
+
+  /v1/rep-eat/users/{userId}/deliveryPerson:
+    patch:
+      tags:
+        - UsersController
+      operationId: updateDeliveryPerson
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/user-schemas.yaml#/components/schemas/UpdateDeliveryPersonRest"
+      responses:
+        200:
+          description: User updated
+        400:
+          description: User update error
+        404:
+          description: User not found
+
+  /v1/rep-eat/restaurant/{restaurantId}/product:
+    post:
+      tags:
+        - ProductsController
+      operationId: createProduct
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant uploading the product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/product-schemas.yaml#/components/schemas/ProductCreationRest"
+      responses:
+        200:
+          description: Product created
+        400:
+          description: Product creation error
+
+  /v1/rep-eat/restaurant/{restaurantId}/products:
+    get:
+      tags:
+        - ProductsController
+      operationId: retrieveRestaurantProducts
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant offering products
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/product-schemas.yaml#/components/schemas/PagedProductRest"
+        400:
+          description: Products retrieve error
+
+  /v1/rep-eat/restaurant/{restaurantId}/addings:
+    get:
+      tags:
+        - ProductsController
+      operationId: retrieveRestaurantAddings
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant offering products
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/product-schemas.yaml#/components/schemas/PagedAddingRest"
+        400:
+          description: Products retrieve error
+
+  /v1/rep-eat/restaurant/{restaurantId}/adding:
+    post:
+      tags:
+        - ProductsController
+      operationId: createAdding
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant uploading the product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/product-schemas.yaml#/components/schemas/AddingCreationRest"
+      responses:
+        200:
+          description: Adding created
+        400:
+          description: Adding creation error
+
+  /v1/rep-eat/restaurant/{restaurantId}/product/{productId}/addings:
+    get:
+      tags:
+        - ProductsController
+      operationId: retrieveProductAddings
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant offering the product
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the product offering addings
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/product-schemas.yaml#/components/schemas/PagedAddingRest"
+        400:
+          description: Addings retrieve error
+
+  /v1/rep-eat/restaurant/{restaurantId}/product/{productId}:
+    patch:
+      tags:
+        - ProductsController
+      operationId: updateProduct
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the product to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/product-schemas.yaml#/components/schemas/ProductUpdateRest"
+      responses:
+        200:
+          description: Product updated
+        400:
+          description: Product update error
+        404:
+          description: Product not found
+
+    delete:
+      tags:
+        - ProductsController
+      operationId: deleteProduct
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the product to delete
+      responses:
+        200:
+          description: Product deleted
+        400:
+          description: Product delete error
+        404:
+          description: Product not found
+
+  /v1/rep-eat/restaurant/{restaurantId}/product/{productId}/updateAddings:
+    patch:
+      tags:
+        - ProductsController
+      operationId: updateProductAddings
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the product to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/product-schemas.yaml#/components/schemas/ProductUpdateRest"
+      responses:
+        200:
+          description: Product updated
+        400:
+          description: Product update error
+        404:
+          description: Product not found
+
+
+
+  /v1/rep-eat/restaurant/{restaurantId}/adding/{addingId}:
+    patch:
+      tags:
+        - ProductsController
+      operationId: updateAdding
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant
+        - name: addingId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the adding to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/product-schemas.yaml#/components/schemas/AddingUpdateRest"
+      responses:
+        200:
+          description: Adding updated
+        400:
+          description: Adding update error
+        404:
+          description: Adding not found
+    delete:
+      tags:
+        - ProductsController
+      operationId: deleteAdding
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant
+        - name: addingId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the adding to delete
+      responses:
+        200:
+          description: Adding deleted
+        400:
+          description: Adding delete error
+        404:
+          description: Adding not found
+
+  /v1/rep-eat/order/customer/{restaurantId}:
+    get:
+      tags:
+        - OrdersController
+      operationId: retrieveRestaurantOrders
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant offering orders
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/order-schemas.yaml#/components/schemas/PagedOrderRest"
+        400:
+          description: Orders retrieve error
+
+  /v1/rep-eat/order/customer/{deliveryPersonId}:
+    get:
+      tags:
+        - OrdersController
+      operationId: retrieveDeliveryPersonOrders
+      parameters:
+        - name: deliveryPersonId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the deliveryPerson delivering the orders
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/order-schemas.yaml#/components/schemas/PagedOrderRest"
+        400:
+          description: Orders retrieve error
+
+  /v1/rep-eat/order/customer/{customerId}/restaurant/{restaurantId}:
+    post:
+      tags:
+        - OrdersController
+      operationId: createOrder
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the customer creating the order
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the restaurant offering the order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/order-schemas.yaml#/components/schemas/OrderCreationRest"
+      responses:
+        200:
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: "./components/order-schemas.yaml#/components/schemas/OrderRest"
+        400:
+          description: Order creation error
+
+  /v1/rep-eat/order/{orderId}/vustomer/{customerId}/restaurant/{restaurantId}:
+    delete:
+      tags:
+        - OrdersController
+      operationId: deleteOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the order
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the order's customer
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the order's restaurant
+      responses:
+        200:
+          description: Adding deleted
+        400:
+          description: Adding delete error
+        404:
+          description: Adding not found

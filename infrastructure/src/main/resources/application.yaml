@@ -1,18 +1,21 @@
 server:
   port: 8080
-  serverlet.context-path: /tfg/api
+  servlet:
+    context-path: /tfg/api
 
 spring:
   application:
-    name: RepEat
+    name: rep_eat
     schema: rep_eat
   jackson:
     default-property-inclusion: non_null
   datasource:
-    url: ${SQLSERVER_CONNECTION_STRING}
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: ${MYSQL_CONNECTION_STRING}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.SQLServerDialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -21,8 +24,24 @@ spring:
         default_schema: ${spring.application.schema}
   flyway:
     url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
     locations: classpath:db/migration
     baseline-on-migrate: true
     default-schema: ${spring.application.schema}
     placeholders:
       schema: ${spring.application.schema}
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    url: /v3/api-docs
+    doc-expansion: list
+    try-it-out-enabled: true
+  info:
+    title: "API Rep-Eat"
+    description: "Documentació interactiva per a l'aplicació de gestió de comandes i repartiment de menjar"
+    version: "1.0.0"

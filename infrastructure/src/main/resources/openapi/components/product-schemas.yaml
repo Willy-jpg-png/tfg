@@ -1,0 +1,144 @@
+components:
+  schemas:
+    PagedProductRest:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductRest'
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: integer
+
+    PagedAddingRest:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddingRest'
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: integer
+
+    ProductCreationRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        addingIds:
+          type: array
+          items:
+            type: number
+        image:
+          type: string
+
+    AddingCreationRest:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        image:
+          type: string
+
+    ProductUpdateRest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        addingIds:
+          type: array
+          items:
+            type: number
+        image:
+          type: string
+
+
+    AddingUpdateRest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        image:
+          type: string
+
+    ProductRest:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+        restaurantId:
+          type: number
+          format: int64
+        customerId:
+          type: number
+          format: int64
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        addingIds:
+          type: array
+          items:
+            type: number
+        image:
+          type: string
+
+    AddingRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        restaurantId:
+          type: number
+          format: int64
+        customerId:
+          type: number
+          format: int64
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+        image:
+          type: string
