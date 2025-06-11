@@ -1,5 +1,6 @@
 package com.ggv.tfg.adapter.driving;
 
+import com.ggv.tfg.exception.AddingException;
 import com.ggv.tfg.exception.ExceptionMessage;
 import com.ggv.tfg.exception.RestaurantException;
 import com.ggv.tfg.exception.UserException;
@@ -9,12 +10,18 @@ import com.ggv.tfg.model.Adding;
 import com.ggv.tfg.model.Product;
 import com.ggv.tfg.openapi.api.ProductsControllerApi;
 import com.ggv.tfg.openapi.rest.*;
+import com.ggv.tfg.persistence.sqlserver.entity.AddingDao;
+import com.ggv.tfg.persistence.sqlserver.repository.AddingRepository;
 import com.ggv.tfg.persistence.sqlserver.repository.RestaurantRepository;
 import com.ggv.tfg.port.out.ProductDefinitionPersistencePort;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -25,6 +32,7 @@ public class ProductDefinitionController implements ProductsControllerApi {
     private ProductMapper productMapper;
     private UserMapper userMapper;
     private RestaurantRepository restaurantRepository;
+    private AddingRepository addingRepository;
 
     @Override
     public ResponseEntity<Void> createAdding(final Long restaurantId, final AddingCreationRest addingCreationRest) throws Exception {
@@ -62,10 +70,25 @@ public class ProductDefinitionController implements ProductsControllerApi {
     @Override
     public ResponseEntity<Void> updateProductAddings(final Long restaurantId, final Long productId, final ProductUpdateRest productUpdateRest) throws Exception {
 
-        final Product product = productMapper.toDomain(productUpdateRest);
+        final List<AddingDao> addingDaos = new ArrayList<>();
+        for (final Integer addingId : productUpdateRest.getAddingIds()) {
+            addingDaos.add(
+                    addingRepository.findById(Long.valueOf(addingId))
+                            .orElseThrow(() -> new AddingException(ExceptionMessage.ADDING_NOT_FOUND_EXCEPTION.getMessage()))
+            );
+        }
+
+        final List<Adding> addings = addingDaos.stream()
+                .map(productMapper::toDomain)
+                .collect(Collectors.toList());
+
+        final Product product = productMapper.toDomain(productUpdateRest, addings);
+
         productDefinitionPersistencePort.updateProductAddings(product, productId, restaurantId);
+
         return ResponseEntity.ok().build();
     }
+
 
     @Override
     public ResponseEntity<Void> updateAdding(final Long restaurantId, final Long addingId, final AddingUpdateRest addingUpdateRest) throws Exception {

@@ -51,6 +51,7 @@ public class UserDefinitionPersistenceAdapter implements UserDefinitionPersisten
             throw new SignUpException(ExceptionMessage.USER_EXISTS_EXCEPTION.getMessage());
 
         customer.setRole(RoleEnum.CUSTOMER);
+        customer.setId(null);
 
         final CustomerDao customerDao = userMapper.toDao(customer);
         try {
@@ -67,6 +68,7 @@ public class UserDefinitionPersistenceAdapter implements UserDefinitionPersisten
             throw new SignUpException(ExceptionMessage.USER_EXISTS_EXCEPTION.getMessage());
 
         restaurant.setRole(RoleEnum.RESTAURANT);
+        restaurant.setId(null);
 
         final RestaurantDao restaurantDao = userMapper.toDao(restaurant);
         try {
@@ -83,6 +85,7 @@ public class UserDefinitionPersistenceAdapter implements UserDefinitionPersisten
             throw new SignUpException(ExceptionMessage.USER_EXISTS_EXCEPTION.getMessage());
 
         deliveryPerson.setRole(RoleEnum.DELIVERY_PERSON);
+        deliveryPerson.setId(null);
 
         final DeliveryPersonDao deliveryPersonDao = userMapper.toDao(deliveryPerson);
         try {
@@ -102,12 +105,27 @@ public class UserDefinitionPersistenceAdapter implements UserDefinitionPersisten
 
         final CustomerDao existingDao = customerRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ExceptionMessage.UPDATE_USER_EXCEPTION.getMessage()));
-        if(customer.getAddress()!=null)
-            existingDao.setAddress(customer.getAddress());
-        if(customer.getName()!=null)
+
+        if (customer.getName() != null)
             existingDao.setName(customer.getName());
-        if(customer.getEmail()!=null)
+
+        if (customer.getEmail() != null)
             existingDao.setEmail(customer.getEmail());
+
+        if (customer.getStreet() != null)
+            existingDao.setStreet(customer.getStreet());
+
+        if (customer.getNumber() != null)
+            existingDao.setNumber(customer.getNumber());
+
+        if (customer.getFloor() != null)
+            existingDao.setFloor(customer.getFloor());
+
+        if (customer.getLatitude() != null)
+            existingDao.setLatitude(customer.getLatitude());
+
+        if (customer.getLongitude() != null)
+            existingDao.setLongitude(customer.getLongitude());
 
         try {
             customerRepository.save(existingDao);
@@ -126,18 +144,28 @@ public class UserDefinitionPersistenceAdapter implements UserDefinitionPersisten
 
         final RestaurantDao existingDao = restaurantRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ExceptionMessage.UPDATE_USER_EXCEPTION.getMessage()));
+
         if (restaurant.getDescription() != null)
             existingDao.setDescription(restaurant.getDescription());
         if (restaurant.getPhone() != null)
             existingDao.setPhone(restaurant.getPhone());
         if (restaurant.getWebsite() != null)
             existingDao.setWebsite(restaurant.getWebsite());
-        if(restaurant.getAddress()!=null)
-            existingDao.setAddress(restaurant.getAddress());
-        if(restaurant.getName()!=null)
+        if (restaurant.getName() != null)
             existingDao.setName(restaurant.getName());
-        if(restaurant.getEmail()!=null)
+        if (restaurant.getEmail() != null)
             existingDao.setEmail(restaurant.getEmail());
+
+        if (restaurant.getStreet() != null)
+            existingDao.setStreet(restaurant.getStreet());
+        if (restaurant.getNumber() != null)
+            existingDao.setNumber(restaurant.getNumber());
+        if (restaurant.getFloor() != null)
+            existingDao.setFloor(restaurant.getFloor());
+        if (restaurant.getLatitude() != null)
+            existingDao.setLatitude(restaurant.getLatitude());
+        if (restaurant.getLongitude() != null)
+            existingDao.setLongitude(restaurant.getLongitude());
 
         try {
             restaurantRepository.save(existingDao);

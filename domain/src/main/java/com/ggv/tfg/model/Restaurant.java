@@ -12,8 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Restaurant extends User {
 
-    private String address;
+    private String street;
+    private String number;
+    private String floor;
+    private Double latitude;
+    private Double longitude;
+
     private String description;
     private String phone;
     private String website;
 }
+

@@ -1,36 +1,55 @@
 package com.ggv.tfg.mapper;
 
-import com.ggv.tfg.model.Order;
-import com.ggv.tfg.openapi.rest.OrderCreationRest;
-import com.ggv.tfg.openapi.rest.OrderRest;
-import com.ggv.tfg.persistence.sqlserver.entity.OrderDao;
-import com.ggv.tfg.persistence.sqlserver.entity.ProductDao;
-import org.mapstruct.Builder;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import com.ggv.tfg.model.*;
+import com.ggv.tfg.model.enums.OrderStatusEnum;
+import com.ggv.tfg.openapi.rest.*;
+import com.ggv.tfg.persistence.sqlserver.entity.*;
+import org.mapstruct.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
-@Mapper(componentModel = SPRING, builder = @Builder(disableBuilder = true))
+@Mapper(componentModel = SPRING, builder = @Builder(disableBuilder = true), uses = {UserMapper.class, ProductMapper.class})
 public interface OrderMapper {
 
-    OrderDao toDao(Order order, List<ProductDao> products);
+    @Mapping(target = "orderProducts", source = "products")
+    @Mapping(target = "restaurant", source = "order.restaurant")
+    @Mapping(target = "customer", source = "order.customer")
+    @Mapping(target = "deliveryPerson", source = "order.deliveryPerson")
+    OrderDao toDao(Order order, List<OrderProductDao> products);
 
+    @Mapping(target = "orderProducts", source = "products")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deliveryPerson", ignore = true)
     @Mapping(target = "totalPrice", ignore = true)
     @Mapping(target = "orderStatus", ignore = true)
-    @Mapping(target = "customer.id", source = "customerId")
-    @Mapping(target = "restaurant.id", source = "restaurantId")
-    @Mapping(target = "deliveryPerson", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    Order toDomain(OrderCreationRest orderCreationRest, Long customerId, Long restaurantId);
+    Order toDomain(OrderCreationRest orderCreationRest, Customer customer, Restaurant restaurant, List<Product> products);
 
-    @Mapping(target = "customerId", source = "customer.id")
-    @Mapping(target = "restaurantId", source = "restaurant.id")
-    @Mapping(target = "deliveryPersonId", source = "deliveryPerson.id")
+    Order toDomain(OrderDao orderDao);
+
+    @Mapping(target = "products", source = "orderProducts")
     OrderRest toRest(Order order);
 
+    PagedOrderRest toPagedOrderRest(Page<Order> orderPage);
 
+    default OrderStatusEnum toOrderStatusEnum(final OrderStatusUpdateRequest request) {
+        if (request == null || request.getOrderStatus() == null) return null;
+        return OrderStatusEnum.valueOf(request.getOrderStatus().getValue());
+    }
+
+    OrderProduct toDomain(OrderProductDao dao);
+
+    @Mapping(target = "order", ignore = true)
+    OrderProductDao toDao(OrderProduct orderProduct);
+
+    OrderDao toDao(Order order);
+
+    @Mapping(target = "id", source = "product.id")
+    @Mapping(target = "name", source = "product.name")
+    @Mapping(target = "price", source = "product.price")
+    @Mapping(target = "addings", source = "addings")
+    ProductRest1 toProductRest(OrderProduct orderProduct);
 
 }

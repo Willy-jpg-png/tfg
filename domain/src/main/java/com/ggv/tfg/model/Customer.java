@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Customer extends User {
 
-    private String address;
+    private String street;
+    private String number;
+    private String floor;
+    private Double latitude;
+    private Double longitude;
 
 }

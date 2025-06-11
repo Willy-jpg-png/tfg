@@ -31,12 +31,8 @@ public class OrderDao {
     @JoinColumn(name = "deliveryPersonId", referencedColumnName = "id")
     private DeliveryPersonDao deliveryPerson;
 
-    @ManyToMany
-    @JoinTable(
-            name = "OrderProducts",
-            joinColumns = @JoinColumn(name = "orderId"),
-            inverseJoinColumns = @JoinColumn(name = "productId")
-    )    private List<ProductDao> products;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderProductDao> orderProducts;
 
     private Double totalPrice;
 

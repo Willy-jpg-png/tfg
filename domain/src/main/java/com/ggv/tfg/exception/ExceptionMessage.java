@@ -24,7 +24,9 @@ public enum ExceptionMessage {
     ORDER_DELETE_EXCEPTION("Unexpected error while deleting order"),
     RETRIEVE_RESTAURANT_EXCEPTION("Unexpected error while retrieving restaurant"),
     RETRIEVE_PRODUCTS_EXCEPTION("Unexpected error while retrieving products"),
-    RETRIEVE_ADDINGS_EXCEPTION("Unexpected error while retrieving addings");
+    RETRIEVE_ADDINGS_EXCEPTION("Unexpected error while retrieving addings"),
+    RETRIEVE_ORDERS_EXCEPTION("Unexpected error while retrieving orders"),
+    USER_NOT_FOUND_EXCEPTION("User not found");
 
     private final String message;
 }

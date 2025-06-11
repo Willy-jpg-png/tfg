@@ -13,37 +13,135 @@ components:
           type: integer
         totalElements:
           type: integer
+
     OrderCreationRest:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        productIds:
+        products:
           type: array
           items:
-            type: number
+            type: object
+            properties:
+              productId:
+                type: integer
+                format: int64
+              addingIds:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+              quantity:
+                type: integer
+
     OrderRest:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        restaurantId:
-          type: number
-          format: int64
-        customerId:
-          type: number
-          format: int64
-        deliveryPersonId:
-          type: number
-          format: int64
-        productIds:
+        restaurant:
+          $ref: "#/components/schemas/RestaurantRest"
+        customer:
+          $ref: "#/components/schemas/CustomerRest"
+        deliveryPerson:
+          $ref: "#/components/schemas/DeliveryPersonRest"
+        products:
           type: array
           items:
-            type: number
+            $ref: "#/components/schemas/ProductRest"
         totalPrice:
           type: number
           format: double
         orderStatus:
           type: string
+
+    OrderStatusUpdateRequest:
+      type: object
+      properties:
+        orderStatus:
+          type: string
+          enum:
+            - ON_PREPARATION
+            - ON_DELIVERY
+            - DELIVERED
+
+    RestaurantRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        street:
+          type: string
+        number:
+          type: string
+        floor:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+
+    CustomerRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        street:
+          type: string
+        number:
+          type: string
+        floor:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+
+
+    DeliveryPersonRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+
+    ProductRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        addings:
+          type: array
+          items:
+            $ref: "#/components/schemas/AddingRest"
+        price:
+          type: number
+          format: double
+
+    AddingRest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+

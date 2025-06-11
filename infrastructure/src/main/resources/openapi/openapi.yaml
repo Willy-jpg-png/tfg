@@ -515,7 +515,70 @@ paths:
         404:
           description: Adding not found
 
-  /v1/rep-eat/order/customer/{restaurantId}:
+  /v1/rep-eat/orders:
+    get:
+      tags:
+        - OrdersController
+      operationId: retrieveUnassignedOrders
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/order-schemas.yaml#/components/schemas/PagedOrderRest"
+        400:
+          description: Orders retrieve error
+
+  /v1/rep-eat/order/customer/{customerId}:
+    get:
+      tags:
+        - OrdersController
+      operationId: retrieveCustomerOrders
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the customer making the orders
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "./components/order-schemas.yaml#/components/schemas/PagedOrderRest"
+        400:
+          description: Orders retrieve error
+
+  /v1/rep-eat/order/restaurant/{restaurantId}:
     get:
       tags:
         - OrdersController
@@ -550,7 +613,7 @@ paths:
         400:
           description: Orders retrieve error
 
-  /v1/rep-eat/order/customer/{deliveryPersonId}:
+  /v1/rep-eat/order/deliveryPerson/{deliveryPersonId}:
     get:
       tags:
         - OrdersController
@@ -655,3 +718,65 @@ paths:
           description: Adding delete error
         404:
           description: Adding not found
+
+  /v1/rep-eat/order/{orderId}/deliveryPerson/{deliveryPersonId}:
+    patch:
+      tags:
+        - OrdersController
+      operationId: assignOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the order to update
+        - name: deliveryPersonId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the deliveryPerson selecting an order
+      responses:
+        200:
+          description: Order updated
+        400:
+          description: Order update error
+        404:
+          description: Order not found
+
+  /v1/rep-eat/order/{orderId}/deliveryPerson/{deliveryPersonId}/status:
+    patch:
+      tags:
+        - OrdersController
+      operationId: updateOrderStatus
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the order to update
+        - name: deliveryPersonId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the deliveryPerson updating an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/order-schemas.yaml#/components/schemas/OrderStatusUpdateRequest"
+      responses:
+        200:
+          description: Order updated
+        400:
+          description: Order update error
+        404:
+          description: Order not found

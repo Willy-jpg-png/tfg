@@ -16,8 +16,7 @@ public class Order {
     private Restaurant restaurant;
     private Customer customer;
     private DeliveryPerson deliveryPerson;
-    private List<Long> productIds;
+    private List<OrderProduct> orderProducts;
     private Double totalPrice;
     private OrderStatusEnum orderStatus = OrderStatusEnum.ON_PREPARATION;
-
 }

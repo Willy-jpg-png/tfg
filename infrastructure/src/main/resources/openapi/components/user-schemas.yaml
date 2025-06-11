@@ -1,5 +1,6 @@
 components:
   schemas:
+
     SignUpCustomerRest:
       type: object
       properties:
@@ -13,9 +14,43 @@ components:
         password:
           type: string
         email:
-            type: string
-        address:
           type: string
+        street:
+          type: string
+        number:
+          type: string
+        floor:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+
+    UpdateCostumerRest:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        street:
+          type: string
+        number:
+          type: string
+        floor:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
 
     SignUpRestaurantRest:
       type: object
@@ -31,14 +66,55 @@ components:
           type: string
         email:
           type: string
-        address:
+        street:
           type: string
+        number:
+          type: string
+        floor:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
         description:
           type: string
         phone:
           type: string
         website:
           type: string
+
+    UpdateRestaurantRest:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        street:
+          type: string
+        number:
+          type: string
+        floor:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        description:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+
 
     SignUpDeliveryPersonRest:
       type: object
@@ -65,40 +141,6 @@ components:
         password:
           type: string
 
-    UpdateCostumerRest:
-      type: object
-      properties:
-        username:
-          type: string
-        name:
-          type: string
-        password:
-          type: string
-        email:
-          type: string
-        address:
-          type: string
-
-    UpdateRestaurantRest:
-      type: object
-      properties:
-        username:
-          type: string
-        name:
-          type: string
-        password:
-          type: string
-        email:
-          type: string
-        address:
-          type: string
-        description:
-          type: string
-        phone:
-          type: string
-        website:
-          type: string
-
     UpdateDeliveryPersonRest:
       type: object
       properties:
@@ -117,7 +159,7 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
           format: int64
         username:
           type: string
@@ -129,12 +171,22 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
           format: int64
         name:
           type: string
-        address:
+        street:
           type: string
+        number:
+          type: string
+        floor:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
         description:
           type: string
         website:

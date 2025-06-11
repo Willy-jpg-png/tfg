@@ -44,7 +44,7 @@ components:
         addingIds:
           type: array
           items:
-            type: number
+            type: integer
         image:
           type: string
 
@@ -52,7 +52,7 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
           format: int64
         name:
           type: string
@@ -77,7 +77,7 @@ components:
         addingIds:
           type: array
           items:
-            type: number
+            type: integer
         image:
           type: string
 
@@ -99,25 +99,25 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
           format: int64
         name:
           type: string
         restaurantId:
-          type: number
+          type: integer
           format: int64
         customerId:
-          type: number
+          type: integer
           format: int64
         description:
           type: string
         price:
           type: number
           format: double
-        addingIds:
+        addings:
           type: array
           items:
-            type: number
+            $ref: '#/components/schemas/AddingRest'
         image:
           type: string
 
@@ -130,10 +130,10 @@ components:
         name:
           type: string
         restaurantId:
-          type: number
+          type: integer
           format: int64
         customerId:
-          type: number
+          type: integer
           format: int64
         description:
           type: string

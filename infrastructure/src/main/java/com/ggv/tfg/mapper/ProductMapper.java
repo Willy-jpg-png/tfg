@@ -9,11 +9,9 @@ import com.ggv.tfg.persistence.sqlserver.entity.ProductDao;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
@@ -21,10 +19,12 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface ProductMapper {
 
     @Mapping(target = "id", ignore = true)
-    ProductDao toDao(Product product, List<AddingDao> addings);
+    ProductDao toDao(Product product, List<AddingDao> addingDaos);
 
     @Mapping(target = "id", ignore = true)
     AddingDao toDao(Adding adding);
+
+    AddingDao toDao(Adding adding, Long addingId);
 
     @Mapping(target = "name", source = "productCreationRest.name")
     @Mapping(target = "description", source = "productCreationRest.description")
@@ -38,6 +38,12 @@ public interface ProductMapper {
 
     @Mapping(target = "restaurant", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "addings", source = "adding")
+    Product toDomain(ProductUpdateRest productUpdateRest, List<Adding> adding);
+
+    @Mapping(target = "addings", ignore = true)
+    @Mapping(target = "restaurant", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Product toDomain(ProductUpdateRest productUpdateRest);
 
     @Mapping(target = "restaurant", ignore = true)
@@ -47,17 +53,11 @@ public interface ProductMapper {
     PagedProductRest toPagedProductRest(Page<Product> productPage);
 
     @Mapping(target = "restaurant", source = "restaurant")
-    @Mapping(target = "addingIds", source = "addings", qualifiedByName = "mapAddingsToIds")
     Product toDomain(ProductDao productDao);
-
-    @Named("mapAddingsToIds")
-    static List<Long> mapAddingsToIds(List<com.ggv.tfg.persistence.sqlserver.entity.AddingDao> addings) {
-        if (addings == null) return null;
-        return addings.stream().map(com.ggv.tfg.persistence.sqlserver.entity.AddingDao::getId).collect(Collectors.toList());
-    }
 
     PagedAddingRest toPagedAddingRest(Page<Adding> productPage);
 
     Adding toDomain(AddingDao addingDao);
 
+    ProductDao toDao(Product product);
 }

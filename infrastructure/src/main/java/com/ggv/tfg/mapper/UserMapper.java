@@ -43,13 +43,10 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     UserDao toUserDao(DeliveryPerson deliveryPerson);
 
-    @Mapping(target = "id", ignore = true)
     CustomerDao toDao(Customer customer);
 
-    @Mapping(target = "id", ignore = true)
     RestaurantDao toDao(Restaurant restaurant);
 
-    @Mapping(target = "id", ignore = true)
     DeliveryPersonDao toDao(DeliveryPerson deliveryPerson);
 
     @Mapping(target = "role", ignore = true)
@@ -70,7 +67,11 @@ public interface UserMapper {
 
     User toDomain(UserDao userDao);
 
+    Customer toDomain(CustomerDao customerDao);
+
     PagedRestaurantRest toPagedRestaurantRest(Page<Restaurant> restaurantPage);
+
+    DeliveryPerson toDomain(DeliveryPersonDao deliveryPersonDao);
 
 
 }

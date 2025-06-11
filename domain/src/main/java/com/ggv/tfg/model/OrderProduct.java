@@ -9,14 +9,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class OrderProduct {
 
     private Long id;
-    private String name;
-    private Restaurant restaurant;
-    private String description;
-    private Double price;
+    private Product product;
+    private int quantity;
     private List<Adding> addings;
-    private String image;
-
 }

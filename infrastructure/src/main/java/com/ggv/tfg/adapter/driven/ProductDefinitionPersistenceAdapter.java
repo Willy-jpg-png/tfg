@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Adapter
@@ -35,14 +36,7 @@ public class ProductDefinitionPersistenceAdapter implements ProductDefinitionPer
     @Override
     public void createProduct(final Product product) throws ProductException, AddingException {
 
-        final List<AddingDao> addingList = new ArrayList<>();
-        for (final Long addingId : product.getAddingIds()) {
-            final var addingDao = addingRepository.findById(addingId);
-            if (addingDao.isEmpty())
-                throw new AddingException(ExceptionMessage.ADDING_NOT_FOUND_EXCEPTION.getMessage());
-            addingList.add(addingDao.get());
-        }
-        final ProductDao productDao = productMapper.toDao(product, addingList);
+        final ProductDao productDao = productMapper.toDao(product);
 
         try {
             productRepository.save(productDao);
@@ -94,21 +88,18 @@ public class ProductDefinitionPersistenceAdapter implements ProductDefinitionPer
     @Override
     public void updateProductAddings(final Product product, final Long productId, final Long restaurantId) throws ProductException, AddingException {
 
-        if (!productRepository.existsByIdAndRestaurantId(productId, restaurantId))
+        if (!productRepository.existsByIdAndRestaurantId(productId, restaurantId)) {
             throw new ProductException(ExceptionMessage.PRODUCT_NOT_FOUND_EXCEPTION.getMessage());
-
-        final ProductDao existingDao = productRepository.findById(productId).
-                orElseThrow(() -> new ProductException(ExceptionMessage.PRODUCT_UPDATE_EXCEPTION.getMessage()));
-
-        final List<AddingDao> addingList = new ArrayList<>();
-        for (final Long addingId : product.getAddingIds()) {
-            final AddingDao addingDao = addingRepository.findById(addingId).
-                    orElseThrow(() -> new AddingException(ExceptionMessage.ADDING_NOT_FOUND_EXCEPTION.getMessage()));
-            addingList.add(addingDao);
-
         }
 
-        existingDao.setAddings(addingList);
+        final ProductDao existingDao = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductException(ExceptionMessage.PRODUCT_UPDATE_EXCEPTION.getMessage()));
+
+        final List<AddingDao> addingDaos = product.getAddings().stream()
+                .map(adding -> productMapper.toDao(adding, adding.getId()))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        existingDao.setAddings(addingDaos);
 
         try {
             productRepository.save(existingDao);
@@ -117,6 +108,7 @@ public class ProductDefinitionPersistenceAdapter implements ProductDefinitionPer
             throw new ProductException(ExceptionMessage.PRODUCT_UPDATE_EXCEPTION.getMessage());
         }
     }
+
 
     @Override
     public void updateAdding(final Adding adding, final Long addingId, final Long restaurantId) throws AddingException {
