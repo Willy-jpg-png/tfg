@@ -12,7 +12,7 @@ This project contains the backend of **RepEat**, a real-time food delivery web a
 - MySQL
 - Maven
 
-## ⚙️ SetUp
+## SetUp
 
 ### 1. Prerequisites
 
